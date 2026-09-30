@@ -1,6 +1,6 @@
 ---
 name: setup-skill
-description: "Configure this repo for the engineering skills: set up its issue tracker, triage label vocabulary, and domain doc layout. Run once before first use of the other engineering skills."
+description: "Configure this repo for the engineering skills: set up its issue tracker, triage label vocabulary, issue types, and domain doc layout. Run once before first use of the other engineering skills."
 disable-model-invocation: true
 ---
 
@@ -10,6 +10,7 @@ Scaffold the per-repo configuration that the engineering skills assume:
 
 - **Issue tracker**: where issues live (GitHub by default; local markdown is also supported out of the box)
 - **Triage labels**: the strings used for the five canonical triage roles
+- **Issue types**: how an issue is marked as a spec, a ticket or a bug (e.g. a GitHub Project field)
 - **Domain docs**: where `GLOSSARY.md` and ADRs live, and the consumer rules for reading them
 
 This is a prompt-driven skill, not a deterministic script. Explore, present what you found, confirm with the user, then write.
@@ -25,6 +26,7 @@ Look at the current repo to understand its starting state. Read whatever exists;
 - `GLOSSARY.md` and `GLOSSARY-MAP.md` at the repo root
 - `docs/adr/` and any `src/*/docs/adr/` directories
 - `docs/agents/`: does this skill's prior output already exist?
+- `gh project list --owner <owner>`: does the repo's owner have GitHub Projects, and does one have a single-select field like "Issue type"? If `gh` reports a missing scope, tell the user to run `gh auth refresh -s project`.
 - `.scratch/`: a sign that a local-markdown issue tracker convention is already in use
 - Monorepo signals: a `pnpm-workspace.yaml`, a `workspaces` field in `package.json`, or a populated `packages/*` with its own `src/`. These are present only in a genuinely large multi-package repo; their absence means single-context, which is almost every repo.
 
@@ -57,12 +59,21 @@ The defaults are the five canonical roles, each label string equal to its name: 
 
 Offer **multi-context** (a root `GLOSSARY-MAP.md` pointing to per-context `GLOSSARY.md` files) only when exploration found monorepo signals. Then confirm which layout they want.
 
+**Section D: Issue types.** Skills mark the issues they create with one of three canonical issue types: `spec` (`to-spec`), `ticket` (`to-tickets`) and `bug` (`triage`, for broken behavior). Ask where the tracker records this, leading with what exploration found:
+
+- **GitHub Project field**: a single-select field (e.g. "Issue type") on a GitHub Project. Ask which project and field, then run `gh project field-list <number> --owner <owner> --format json` and match the field's options to the three types. Look up the project node id with `gh project view <number> --owner <owner> --format json --jq .id`. Record all ids so skills never have to look them up. If an option is missing for a type, ask whether to add it in the project settings or map the type to an existing option.
+- **Labels**: one label per type (e.g. `type:spec`, `type:ticket`, `type:bug`).
+- **None**: don't record issue types; don't write `docs/agents/issue-types.md`.
+- **Other** (GitHub native issue types, Jira, Linear, etc.): ask the user to describe it in one paragraph and record it as freeform prose.
+
+Record the choice in `docs/agents/issue-types.md`.
+
 ### 3. Confirm and edit
 
 Show the user a draft of:
 
 - The `## Agent skills` block to add to whichever of `CLAUDE.md` / `AGENTS.md` is being edited (see step 4 for selection rules)
-- The contents of `docs/agents/issue-tracker.md`, `docs/agents/domain.md`, and `docs/agents/triage-labels.md`
+- The contents of `docs/agents/issue-tracker.md`, `docs/agents/domain.md`, `docs/agents/triage-labels.md`, and `docs/agents/issue-types.md` (unless issue types are "None")
 
 Let them edit before writing.
 
@@ -91,6 +102,10 @@ The block:
 
 [one-line summary of the label vocabulary]. See `docs/agents/triage-labels.md`.
 
+### Issue types
+
+[one-line summary of where spec / ticket / bug types are recorded]. See `docs/agents/issue-types.md`.
+
 ### Domain docs
 
 [one-line summary of layout: "single-context" or "multi-context"]. See `docs/agents/domain.md`.
@@ -102,9 +117,10 @@ Then write the docs files using the seed templates in this skill folder as a sta
 - [issue-tracker-gitlab.md](./issue-tracker-gitlab.md): GitLab issue tracker
 - [issue-tracker-local.md](./issue-tracker-local.md): local-markdown issue tracker
 - [triage-labels.md](./triage-labels.md): label mapping
+- [issue-types-github-project.md](./issue-types-github-project.md): issue types in a GitHub Project field
 - [domain.md](./domain.md): domain doc consumer rules + layout
 
-For "other" issue trackers, write `docs/agents/issue-tracker.md` from scratch using the user's description.
+For "other" issue trackers, write `docs/agents/issue-tracker.md` from scratch using the user's description. Do the same for `docs/agents/issue-types.md` with labels or "other" issue types. Leave out the `### Issue types` sub-block when issue types are "None".
 
 ### 5. Done
 
