@@ -135,7 +135,7 @@ Most skills come from [mattpocock/skills](https://github.com/mattpocock/skills),
 | `planning` | `grill-me`, `grill-with-docs`, `to-spec`, `to-tickets`, `triage` (+ `grilling`, `domain-modeling`) |
 | `engineering` | `implement`, `code-review`, `diagnosing-bugs` (+ `tdd`, `codebase-design`) |
 
-`to-spec`, `to-tickets`, `triage` and `code-review` work with your issue tracker. Before using them in a project, run `/setup-skill` there once. It asks where issues live, which triage labels to use, and how issues are marked as a Spec, Ticket or Bug (for example a GitHub Project "Issue type" field). It then writes the answers to `docs/agents/` and to `AGENTS.md`, and `to-spec`, `to-tickets` and `triage` set the issue type from there. The order doesn't matter: you can run it before or after installing skills.
+`to-spec`, `to-tickets`, `triage` and `code-review` work with your issue tracker. Before using them in a project, run `/setup-skill` there once. It asks where issues live, which triage labels to use, and how issues are marked as a Spec, Ticket or Bug (for example a GitHub Project "Issue type" field). It then writes the answers to `docs/agents/` and to `AGENTS.md`, and `to-spec`, `to-tickets` and `triage` set the issue type from there. It also asks how to mark an issue as in progress (for example the Project's "Status" field), which `implement` does when it starts on an issue. The order doesn't matter: you can run it before or after installing skills.
 
 ## Other settings
 

@@ -8,6 +8,8 @@ metadata:
 
 Implement the work described by the user in the spec or tickets.
 
+When the work comes from issues in the issue tracker, move each issue to the `in-progress` status as described in `docs/agents/issue-status.md` when you start working on it (skip this when that file doesn't exist).
+
 Use /tdd where possible, at pre-agreed seams.
 
 Run typechecking regularly, single test files regularly, and the full test suite once at the end.

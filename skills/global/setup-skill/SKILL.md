@@ -1,6 +1,6 @@
 ---
 name: setup-skill
-description: "Configure this repo for the engineering skills: set up its issue tracker, triage label vocabulary, issue types, and domain doc layout. Run once before first use of the other engineering skills."
+description: "Configure this repo for the engineering skills: set up its issue tracker, triage label vocabulary, issue types, issue status, and domain doc layout. Run once before first use of the other engineering skills."
 disable-model-invocation: true
 ---
 
@@ -11,6 +11,7 @@ Scaffold the per-repo configuration that the engineering skills assume:
 - **Issue tracker**: where issues live (GitHub by default; local markdown is also supported out of the box)
 - **Triage labels**: the strings used for the five canonical triage roles
 - **Issue types**: how an issue is marked as a spec, a ticket or a bug (e.g. a GitHub Project field)
+- **Issue status**: how an issue is moved to "in progress" when work starts (e.g. a GitHub Project "Status" field)
 - **Domain docs**: where `GLOSSARY.md` and ADRs live, and the consumer rules for reading them
 
 This is a prompt-driven skill, not a deterministic script. Explore, present what you found, confirm with the user, then write.
@@ -68,12 +69,21 @@ Offer **multi-context** (a root `GLOSSARY-MAP.md` pointing to per-context `GLOSS
 
 Record the choice in `docs/agents/issue-types.md`.
 
+**Section E: Issue status.** `implement` moves an issue to the canonical status `in-progress` when it starts working on it. Ask where the tracker records status, leading with what exploration found:
+
+- **GitHub Project field**: usually the project's built-in "Status" single-select field. Use the same project as Section D when there is one. Run `gh project field-list <number> --owner <owner> --format json` and match an option (typically "In progress") to `in-progress`. Record the project node id, field id and option id.
+- **Labels**: a label for the status (e.g. `in-progress`).
+- **None**: don't track status; don't write `docs/agents/issue-status.md`.
+- **Other** (Jira, Linear, etc.): ask the user to describe it in one paragraph and record it as freeform prose.
+
+Record the choice in `docs/agents/issue-status.md`.
+
 ### 3. Confirm and edit
 
 Show the user a draft of:
 
 - The `## Agent skills` block to add to whichever of `CLAUDE.md` / `AGENTS.md` is being edited (see step 4 for selection rules)
-- The contents of `docs/agents/issue-tracker.md`, `docs/agents/domain.md`, `docs/agents/triage-labels.md`, and `docs/agents/issue-types.md` (unless issue types are "None")
+- The contents of `docs/agents/issue-tracker.md`, `docs/agents/domain.md`, `docs/agents/triage-labels.md`, `docs/agents/issue-types.md` (unless issue types are "None"), and `docs/agents/issue-status.md` (unless issue status is "None")
 
 Let them edit before writing.
 
@@ -106,6 +116,10 @@ The block:
 
 [one-line summary of where spec / ticket / bug types are recorded]. See `docs/agents/issue-types.md`.
 
+### Issue status
+
+[one-line summary of where the in-progress status is recorded]. See `docs/agents/issue-status.md`.
+
 ### Domain docs
 
 [one-line summary of layout: "single-context" or "multi-context"]. See `docs/agents/domain.md`.
@@ -118,9 +132,10 @@ Then write the docs files using the seed templates in this skill folder as a sta
 - [issue-tracker-local.md](./issue-tracker-local.md): local-markdown issue tracker
 - [triage-labels.md](./triage-labels.md): label mapping
 - [issue-types-github-project.md](./issue-types-github-project.md): issue types in a GitHub Project field
+- [issue-status-github-project.md](./issue-status-github-project.md): issue status in a GitHub Project field
 - [domain.md](./domain.md): domain doc consumer rules + layout
 
-For "other" issue trackers, write `docs/agents/issue-tracker.md` from scratch using the user's description. Do the same for `docs/agents/issue-types.md` with labels or "other" issue types. Leave out the `### Issue types` sub-block when issue types are "None".
+For "other" issue trackers, write `docs/agents/issue-tracker.md` from scratch using the user's description. Do the same for `docs/agents/issue-types.md` and `docs/agents/issue-status.md` with labels or "other". Leave out the `### Issue types` or `### Issue status` sub-block when that section's answer is "None".
 
 ### 5. Done
 
