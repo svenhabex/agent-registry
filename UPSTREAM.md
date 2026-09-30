@@ -14,6 +14,7 @@ Skills copied from [mattpocock/skills](https://github.com/mattpocock/skills) at 
 | `skills/planning/domain-modeling` | `skills/engineering/domain-modeling` |
 | `skills/planning/to-spec` | `skills/engineering/to-spec` |
 | `skills/planning/to-tickets` | `skills/engineering/to-tickets` |
+| `skills/planning/triage` | `skills/engineering/triage` |
 | `skills/engineering/implement` | `skills/engineering/implement` |
 | `skills/engineering/tdd` | `skills/engineering/tdd` |
 | `skills/engineering/codebase-design` | `skills/engineering/codebase-design` |
@@ -30,7 +31,7 @@ git -C /tmp/mp-skills diff d81f3a1 HEAD -- skills/
 ## Local modifications
 
 - Added `metadata: requires:` to the frontmatter of skills that call other skills, so `agent-registry install` copies their dependencies too.
-- `setup-skill` (upstream `setup-matt-pocock-skills`): renamed; references in `to-spec`, `to-tickets` and `code-review` updated. Step 4 writes the `## Agent skills` block into `AGENTS.md` first (instead of `CLAUDE.md`), so Codex sees it and Claude Code gets it through `@AGENTS.md`.
+- `setup-skill` (upstream `setup-matt-pocock-skills`): renamed; references in `to-spec`, `to-tickets`, `triage` and `code-review` updated. Step 4 writes the `## Agent skills` block into `AGENTS.md` first (instead of `CLAUDE.md`), so Codex sees it and Claude Code gets it through `@AGENTS.md`. Section B (triage labels) always runs, and `docs/agents/triage-labels.md` is always written, instead of only when `triage` is installed: `to-spec` and `to-tickets` apply these labels too, and `triage` can be installed after setup.
 
 ## License
 

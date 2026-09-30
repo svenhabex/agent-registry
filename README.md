@@ -66,6 +66,11 @@ CLAUDE.md                         contains only @AGENTS.md
 
 Existing files are kept. If `.claude/skills` already had skills in it, they are moved to `.agents/skills/`.
 
+When it's done, it prints the next steps:
+
+1. Install skills with `agent-registry install`.
+2. If you use `to-spec`, `to-tickets`, `triage` or `code-review`, open Claude Code or Codex in the project and run `/setup-skill`. `init-project` can't do this step because the skill asks you questions. It records your issue tracker and triage labels in `docs/agents/` and `AGENTS.md`.
+
 ### `list` — see what's in the catalog
 
 ```sh
@@ -127,10 +132,10 @@ Most skills come from [mattpocock/skills](https://github.com/mattpocock/skills),
 | Category | Skills |
 | --- | --- |
 | `global` | `teach`, `handoff`, `to-questionnaire`, `setup-skill` |
-| `planning` | `grill-me`, `grill-with-docs`, `to-spec`, `to-tickets` (+ `grilling`, `domain-modeling`) |
+| `planning` | `grill-me`, `grill-with-docs`, `to-spec`, `to-tickets`, `triage` (+ `grilling`, `domain-modeling`) |
 | `engineering` | `implement`, `code-review`, `diagnosing-bugs` (+ `tdd`, `codebase-design`) |
 
-`to-spec`, `to-tickets` and `code-review` work with your issue tracker. Before using them in a project, run `/setup-skill` there once. It asks where issues live and writes the answers to `docs/agents/` and to `AGENTS.md`.
+`to-spec`, `to-tickets`, `triage` and `code-review` work with your issue tracker. Before using them in a project, run `/setup-skill` there once. It asks where issues live and which triage labels to use, then writes the answers to `docs/agents/` and to `AGENTS.md`. The order doesn't matter: you can run it before or after installing skills.
 
 ## Other settings
 

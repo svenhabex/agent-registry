@@ -41,6 +41,15 @@ NOT_SKILLS = {"synced"}
 GLOBAL_CLAUDE_MD = "@~/.agents/AGENTS.md\n"
 PROJECT_CLAUDE_MD = "@AGENTS.md\n"
 
+PROJECT_NEXT_STEPS = """
+Next steps:
+  1. Add skills:  agent-registry list
+                  agent-registry install <category>[/<skill>]
+  2. Using to-spec, to-tickets, triage or code-review? Open Claude Code or Codex
+     here and run /setup-skill to configure the issue tracker and triage labels.
+     Commit docs/agents/ afterwards.
+"""
+
 DRY_RUN = False
 
 
@@ -278,6 +287,7 @@ def cmd_init_project(args):
             claude_skills.rmdir()
 
     ensure_symlink(claude_skills, agents_skills, relative=True)
+    print(PROJECT_NEXT_STEPS)
 
 
 def read_requires(skill):
