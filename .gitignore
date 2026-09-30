@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.bak-*
+.DS_Store
+# claude.ai skill sync may write here once ~/.claude/skills is a symlink
+skills/global/synced/
